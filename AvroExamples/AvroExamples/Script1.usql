@@ -1,0 +1,5 @@
+﻿DECLARE @output_file string = @"\output\observation.arvo";
+
+@o = SELECT * FROM dbo.observation WHERE value != null && timekey != null ORDER BY datekey ASC FETCH 100;
+
+OUTPUT @o TO @output_file USING new AvroExamples.AvroOutputter(@"{""type"":""record"",""name"":""AnonType_WeatherDataSet"",""fields"":[{""name"":""station"",""type"":[""null"",""string""]},{""name"":""datekey"",""type"":[""null"",""int""]},{""name"":""element"",""type"":[""null"",""string""]},{""name"":""value"",""type"":[""null"",""double""]},{""name"":""mflag"",""type"":[""null"",""string""]},{""name"":""qflag"",""type"":[""null"",""string""]},{""name"":""sflag"",""type"":[""null"",""string""]},{""name"":""timekey"",""type"":[""null"",""int""]}]}");

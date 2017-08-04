@@ -1,0 +1,49 @@
+﻿DECLARE @input_file string = @"\Samples\Data\Avro\{*}.avro";
+DECLARE @output_file string = @"\output\observation.csv";
+
+@rs =
+EXTRACT station string,
+            datekey int,
+            element string,
+            value decimal?,
+            mflag string,
+            qflag string,
+            sflag string,
+            timekey int?
+    FROM @input_file
+    USING new AvroExamples.AvroExtractor(@"
+    {
+      ""type"" : ""record"",
+      ""name"" : ""Observation"",
+      ""namespace"" : ""WeatherData"",
+      ""fields"" : [ {
+        ""name"" : ""station"",
+        ""type"" : [ ""null"", ""string"" ]
+      }, {
+        ""name"" : ""datekey"",
+        ""type"" : [ ""null"", ""int"" ]
+      }, {
+        ""name"" : ""element"",
+        ""type"" : [ ""null"", ""decimal"" ]
+      }, {
+        ""name"" : ""mflag"",
+        ""type"" : [ ""null"", ""string"" ]
+      }, {
+        ""name"" : ""qlfag"",
+        ""type"" : [ ""null"", ""string"" ]
+      }, {
+        ""name"" : ""slfag"",
+        ""type"" : [ ""null"", ""string"" ]
+      }, {
+        ""name"" : ""timekey"",
+        ""type"" : [ ""null"", ""int"" ]
+      } ]
+    }
+    ");
+
+@cnt =
+    SELECT station, COUNT(*) AS cnt
+    FROM @rs
+    GROUP BY station;
+
+OUTPUT @cnt TO @output_file USING Outputters.Text();

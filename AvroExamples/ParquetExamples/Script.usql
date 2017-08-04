@@ -1,0 +1,30 @@
+﻿DROP ASSEMBLY IF EXISTS [ParquetOutputter];
+CREATE ASSEMBLY [ParquetOutputter] FROM @"pq/ParquetOutputter.dll";
+DROP ASSEMBLY IF EXISTS [Parquet];
+CREATE ASSEMBLY [Parquet] FROM @"pq/Parquet.dll";
+DROP ASSEMBLY IF EXISTS [Thrift];
+CREATE ASSEMBLY [Thrift] FROM @"pq/apache-thrift-netcore.dll";
+DROP ASSEMBLY IF EXISTS [NetBox];
+CREATE ASSEMBLY [NetBox] FROM @"pq/NetBox.dll";
+DROP ASSEMBLY IF EXISTS [Newtonsoft.Json];
+CREATE ASSEMBLY [Newtonsoft.Json] FROM @"pq/Newtonsoft.Json.dll";
+DROP ASSEMBLY IF EXISTS [Snappy.Sharp];
+CREATE ASSEMBLY [Snappy.Sharp] FROM @"pq/Snappy.Sharp.dll";
+DROP ASSEMBLY IF EXISTS [System.ValueTuple];
+CREATE ASSEMBLY [System.ValueTuple] FROM @"pq/System.ValueTuple.dll";
+
+REFERENCE ASSEMBLY [ParquetOutputter];
+REFERENCE ASSEMBLY [Parquet];
+REFERENCE ASSEMBLY [Thrift];
+REFERENCE ASSEMBLY [NetBox];
+REFERENCE ASSEMBLY [Newtonsoft.Json];
+REFERENCE ASSEMBLY [Snappy.Sharp];
+REFERENCE ASSEMBLY [System.ValueTuple]; 
+REFERENCE SYSTEM ASSEMBLY [System.XML]; 
+
+DECLARE @output_file string = @"output\observation.parquet";
+
+@o = SELECT station, element, datekey FROM dbo.observation WHERE value != null && timekey != null && !string.IsNullOrEmpty(element) && datekey > 0  ORDER BY datekey ASC FETCH 1000000;
+
+//OUTPUT @o TO @output_file USING new Parquet.Adla.Outputter.ParquetOutputter();
+OUTPUT @o TO @output_file USING new ParquetExamples.ParquetOutputter(5000);

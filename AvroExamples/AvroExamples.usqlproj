@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>3013db4a-4f98-4ee0-9796-3172fb40c065</ProjectGuid>
+    <OutputType>File</OutputType>
+    <AssemblyName>Algebra.xml</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <Name>AvroExamples</Name>
+    <RootNamespace>AvroExamples</RootNamespace>
+    <RuntimeVersion>default</RuntimeVersion>
+    <OutputStreamPath>C:\Users\Jason Yip\AppData\Local\USQLDataRoot</OutputStreamPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Script Include="1-CreateDB.usql" />
+    <Script Include="2-RegisterAssemblies.usql" />
+    <Script Include="3-SimpleAvro.usql" />
+    <Script Include="Script1.usql" />
+    <ScriptCode Include="1-CreateDB.usql.cs">
+      <DependentUpon>1-CreateDB.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="2-RegisterAssemblies.usql.cs">
+      <DependentUpon>2-RegisterAssemblies.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="3-SimpleAvro.usql.cs">
+      <DependentUpon>3-SimpleAvro.usql</DependentUpon>
+    </ScriptCode>
+    <ScriptCode Include="Script1.usql.cs">
+      <DependentUpon>Script1.usql</DependentUpon>
+    </ScriptCode>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Hadoop.Avro">
+      <Name>Microsoft.Hadoop.Avro</Name>
+      <AssemblyName>Microsoft.Hadoop.Avro.dll</AssemblyName>
+      <HintPath>..\..\DataFormats\packages\Microsoft.Hadoop.Avro.1.5.6\lib\net45\Microsoft.Hadoop.Avro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <Name>Newtonsoft.Json</Name>
+      <AssemblyName>Newtonsoft.Json.dll</AssemblyName>
+      <HintPath>..\..\DataFormats\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <Name>System.Runtime.Serialization</Name>
+      <AssemblyName>System.Runtime.Serialization.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Runtime.Serialization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.XML">
+      <Name>System.XML</Name>
+      <AssemblyName>System.XML.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.XML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(AppData)\Microsoft\DataLake\MsBuild\1.0\Usql.targets" />
+</Project>
